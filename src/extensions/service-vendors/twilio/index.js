@@ -331,6 +331,10 @@ export async function sendMessage({
       parseMessageText(message)
     );
 
+    if(process.env.WHATSAPP_INSTEAD_OF_SMS) {
+      messageParams.from = process.env.WHATSAPP_INSTEAD_OF_SMS
+    }
+
     console.log("twilioMessage", messageParams);
     if (APITEST) {
       let fakeErr = null;
