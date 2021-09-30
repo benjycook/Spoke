@@ -314,13 +314,18 @@ export async function sendMessage({
       changes.messageservice_sid = messagingServiceSid;
     }
 
+    let whatsapp = "";
+    if(process.env.WHATSAPP_INSTEAD_OF_SMS) {
+      whatsapp = "whatsapp:"
+    }
+
     const messageParams = Object.assign(
       {
-        to: message.contact_number,
+        to: `${whatsapp}${message.contact_number}`,
         body: message.text,
         statusCallback: process.env.TWILIO_STATUS_CALLBACK_URL
       },
-      userNumber ? { from: userNumber } : {},
+      userNumber ? { from: `${whatsapp}${userNumber}` } : {},
       messagingServiceSid ? { messagingServiceSid } : {},
       twilioValidityPeriod ? { validityPeriod: twilioValidityPeriod } : {},
       parseMessageText(message)
@@ -524,7 +529,12 @@ export async function handleIncomingMessage(message) {
     log.error(`This is not an incoming message: ${JSON.stringify(message)}`);
   }
 
-  const { From, To, MessageSid } = message;
+  let { From, To, MessageSid } = message;
+  if(process.env.WHATSAPP_INSTEAD_OF_SMS) {
+    From = From.replace("whatsapp:","");
+    To = To.replace("whatsapp:","");
+  }
+
   const contactNumber = getFormattedPhoneNumber(From);
   const userNumber = To ? getFormattedPhoneNumber(To) : "";
 
