@@ -539,8 +539,13 @@ export async function handleIncomingMessage(message) {
     To = To.replace("whatsapp:","");
   }
 
-  const contactNumber = getFormattedPhoneNumber(From);
-  const userNumber = To ? getFormattedPhoneNumber(To) : "";
+  let contactNumber = getFormattedPhoneNumber(From);
+  let userNumber = To ? getFormattedPhoneNumber(To) : "";
+
+  if(process.env.WHATSAPP_INSTEAD_OF_SMS) {
+    contactNumber = `whatsapp:${contactNumber}`
+    userNumber = `whatsapp:${userNumber}`
+  }
 
   const pendingMessagePart = new PendingMessagePart({
     service: "twilio",
