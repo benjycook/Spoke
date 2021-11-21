@@ -554,8 +554,8 @@ export async function handleIncomingMessage(message) {
     service_id: MessageSid,
     parent_id: null,
     service_message: JSON.stringify(message),
-    user_number: userNumber,
-    contact_number: contactNumber
+    user_number: userNumber.replace("whatsapp:",""),
+    contact_number: contactNumber.replace("whatsapp:","")
   });
   if (process.env.JOBS_SAME_PROCESS || global.JOBS_SAME_PROCESS) {
     // Handle the message directly and skip saving an intermediate part
