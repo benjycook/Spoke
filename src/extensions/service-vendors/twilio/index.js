@@ -61,6 +61,7 @@ const headerValidator = url => {
   if (!!TWILIO_SKIP_VALIDATION) return (req, res, next) => next();
 
   return async (req, res, next) => {
+    console.log("Incoming Request from Twilio",req.body,req.params);
     const organization = req.params.orgId
       ? await cacheableData.organization.load(req.params.orgId)
       : null;
@@ -118,6 +119,7 @@ export function addServerEndpoints(addPostRoute) {
         global.TWILIO_MESSAGE_CALLBACK_URL
     ),
     wrap(async (req, res) => {
+      console.log("Incoming Request from Twilio",req.body);
       try {
         await handleIncomingMessage(req.body);
       } catch (ex) {
