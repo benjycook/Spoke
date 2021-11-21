@@ -193,7 +193,7 @@ async function convertMessagePartsToMessage(messageParts) {
     service_id: firstPart.service_id,
     // will be set during cacheableData.message.save()
     // campaign_contact_id: lastMessage.campaign_contact_id,
-    messageservice_sid: serviceMessages[0].MessagingServiceSid,
+    messageservice_sid: process.env.TWILIO_MESSAGE_SERVICE_SID,
     service: "twilio",
     send_status: "DELIVERED",
     user_id: null
